@@ -10,11 +10,27 @@
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; line-height: 1.5; margin: 0; }
     main { max-width: 860px; margin: 0 auto; padding: 48px 20px; }
     h1 { margin: 0 0 8px 0; font-size: 40px; }
+    h2 { margin-top: 28px; }
     p { margin: 12px 0; }
     .card { background: #f6f7f9; border: 1px solid #e3e6ea; border-radius: 12px; padding: 18px 16px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
     nav a { display: inline-block; margin-right: 14px; }
     footer { margin-top: 32px; font-size: 14px; color: #444; }
     code { background: #eef0f3; padding: 2px 6px; border-radius: 6px; }
+    .btn {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #0b5fff;
+      background: #0b5fff;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .btn.secondary { background: transparent; color: #0b5fff; }
+    .muted { color: #555; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -25,6 +41,23 @@
     <div class="card" role="note" aria-label="Support contact">
       <p><strong>Support:</strong> <a href="mailto:support@capitalistengine.ai">support@capitalistengine.ai</a></p>
       <p>If you have a billing question or need help with a purchase, email us and include the email used at checkout.</p>
+    </div>
+
+    <h2>Buy</h2>
+    <p class="muted">Purchase links preserve UTM parameters plus <code>experiment_id</code> and <code>variant_id</code> from the current page URL.</p>
+
+    <div class="grid" aria-label="Offers">
+      <div class="card">
+        <h3 style="margin: 0 0 6px 0;">Template Pack — $29</h3>
+        <p class="muted">One-time purchase. Instant access after checkout.</p>
+        <a class="btn" id="buy-template" data-base="https://buy.stripe.com/00wdRb3Badx18VA1kfc7u00" target="_blank" rel="noopener">Buy template pack</a>
+      </div>
+
+      <div class="card">
+        <h3 style="margin: 0 0 6px 0;">Setup Service — $299</h3>
+        <p class="muted">One-time purchase. We’ll follow up by email to schedule.</p>
+        <a class="btn" id="buy-setup" data-base="https://buy.stripe.com/dRmfZj5Ji64z6Ns9QLc7u01" target="_blank" rel="noopener">Buy setup service</a>
+      </div>
     </div>
 
     <h2>Policies</h2>
@@ -42,6 +75,33 @@
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    function buildTrackedUrl(base) {
+      const url = new URL(base);
+      const params = new URLSearchParams(window.location.search);
+
+      // Carry through UTMs + common click IDs
+      for (const [k, v] of params.entries()) {
+        const keep = k.startsWith('utm_') || ['gclid', 'fbclid', 'ttclid'].includes(k);
+        if (keep && v) url.searchParams.set(k, v);
+      }
+
+      // Ensure experiment_id / variant_id always present
+      const experimentId = params.get('experiment_id') || params.get('experiment') || params.get('exp') || 'na';
+      const variantId = params.get('variant_id') || params.get('variant') || params.get('var') || 'na';
+      url.searchParams.set('experiment_id', experimentId);
+      url.searchParams.set('variant_id', variantId);
+
+      return url.toString();
+    }
+
+    for (const id of ['buy-template', 'buy-setup']) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const base = el.getAttribute('data-base');
+      if (!base) continue;
+      el.setAttribute('href', buildTrackedUrl(base));
+    }
   </script>
 </body>
 </html>
