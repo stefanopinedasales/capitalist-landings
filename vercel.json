@@ -2,6 +2,16 @@
   "rewrites": [
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" },
-    { "source": "/refund", "destination": "/refund.html" }
+    { "source": "/refund", "destination": "/refund.html" },
+    { "source": "/template-pack/thanks", "destination": "/thanks.html" }
+  ],
+  "headers": [
+    {
+      "source": "/downloads/(.*)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/zip" },
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    }
   ]
 }
