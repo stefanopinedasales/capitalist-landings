@@ -1,0 +1,18 @@
+[
+  {
+    "id": "template-pack",
+    "name": "Template Pack",
+    "price_display": "$29",
+    "description": "One-time purchase. Instant access after checkout.",
+    "cta_text": "Buy template pack",
+    "buy_url": "https://buy.stripe.com/00wdRb3Badx18VA1kfc7u00"
+  },
+  {
+    "id": "setup-service",
+    "name": "Setup Service",
+    "price_display": "$299",
+    "description": "One-time purchase. We'll follow up by email to schedule.",
+    "cta_text": "Buy setup service",
+    "buy_url": "https://buy.stripe.com/dRmfZj5Ji64z6Ns9QLc7u01"
+  }
+]

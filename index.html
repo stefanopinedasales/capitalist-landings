@@ -48,16 +48,16 @@
     <p class="muted">Purchase links preserve UTM parameters plus <code>experiment_id</code> and <code>variant_id</code> from the current page URL.</p>
 
     <div class="grid" aria-label="Offers">
+
       <div class="card">
         <h3 style="margin: 0 0 6px 0;">Template Pack — $29</h3>
         <p class="muted">One-time purchase. Instant access after checkout.</p>
-        <a class="btn" id="buy-template" data-base="https://capitalistengine.ai/r/template-pack/buy" target="_blank" rel="noopener">Buy template pack</a>
+        <a class="btn" href="https://buy.stripe.com/00wdRb3Badx18VA1kfc7u00" target="_blank" rel="noopener">Buy template pack</a>
       </div>
-
       <div class="card">
         <h3 style="margin: 0 0 6px 0;">Setup Service — $299</h3>
-        <p class="muted">One-time purchase. We’ll follow up by email to schedule.</p>
-        <a class="btn" id="buy-setup" data-base="https://buy.stripe.com/dRmfZj5Ji64z6Ns9QLc7u01" target="_blank" rel="noopener">Buy setup service</a>
+        <p class="muted">One-time purchase. We'll follow up by email to schedule.</p>
+        <a class="btn" href="https://buy.stripe.com/dRmfZj5Ji64z6Ns9QLc7u01" target="_blank" rel="noopener">Buy setup service</a>
       </div>
     </div>
 
@@ -76,33 +76,6 @@
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
-
-    function buildTrackedUrl(base) {
-      const url = new URL(base);
-      const params = new URLSearchParams(window.location.search);
-
-      // Carry through UTMs + common click IDs
-      for (const [k, v] of params.entries()) {
-        const keep = k.startsWith('utm_') || ['gclid', 'fbclid', 'ttclid'].includes(k);
-        if (keep && v) url.searchParams.set(k, v);
-      }
-
-      // Ensure experiment_id / variant_id always present
-      const experimentId = params.get('experiment_id') || params.get('experiment') || params.get('exp') || 'na';
-      const variantId = params.get('variant_id') || params.get('variant') || params.get('var') || 'na';
-      url.searchParams.set('experiment_id', experimentId);
-      url.searchParams.set('variant_id', variantId);
-
-      return url.toString();
-    }
-
-    for (const id of ['buy-template', 'buy-setup']) {
-      const el = document.getElementById(id);
-      if (!el) continue;
-      const base = el.getAttribute('data-base');
-      if (!base) continue;
-      el.setAttribute('href', buildTrackedUrl(base));
-    }
   </script>
 </body>
 </html>
